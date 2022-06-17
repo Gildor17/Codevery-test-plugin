@@ -1,0 +1,132 @@
+.widget_cote_widget {
+    box-shadow: 0 9px 28px 8px rgba(103, 119, 134, 0.05), 0 6px 16px rgba(103, 119, 134, 0.08), 0 3px 6px -4px rgba(103, 119, 134, 0.12) !important;
+    width: auto !important;
+}
+.footer-wrapper .widget_cote_widget, .footer-widget.widget_cote_widget {
+    background-color: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    width: auto !important;
+}
+.cote-widget:not(.cote-footer-link) {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #FFFFFF;
+    border-radius: 10px;
+    color: black;
+}
+.cote-widget .section-header {
+    background-color: transparent;
+    padding: 0;
+    border: 0;
+}
+.cote-widget .widget-title, .cote-widget .widget-header, .cote-widget .sidebar-widget-title {
+    color: black !important;
+    margin: 15px !important;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 23px;
+    background: white;
+    padding: 0 !important;
+    text-align: left;
+    text-transform: none;
+    border: none !important;
+}
+.cote-widget .widget-title:before, .cote-widget .widget-title:after {
+    display: none !important;
+}
+.cote-widget .cote-widget-image {
+    width: 100%;
+    display: block;
+}
+.cote-widget:not(.cote-footer-link) .cote-widget-button1 {
+    margin: 15px !important;
+    margin-top: 0px !important;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 29px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    outline: 0;
+    border: 0;
+    min-height: 40px;
+    padding: 0;
+    color: #27AE60;
+    display: block;
+    transition: .2s;
+    text-shadow: none;
+    cursor: pointer;
+}
+.cote-widget:not(.cote-footer-link) .cote-widget-button1.cote-widget-button-bordered {
+    border: 1px solid #3761EA;
+}
+.cote-widget:not(.cote-footer-link) .cote-widget-button1.cote-widget-button-shadowed {
+    box-shadow: 0 0 10px rgba(205, 212, 222, 0.5);
+    white-space: nowrap;
+}
+.cote-widget:not(.cote-footer-link) .cote-widget-button1:hover {
+    background: #27AE60;
+    color: #ffffff;
+}
+
+/* Dropdown Button */
+.cote-widget-dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Dropdown button on hover & focus */
+.cote-widget-dropbtn:hover, .cote-widget-dropbtn:focus {
+    background-color: #3e8e41;
+}
+
+/* The search field */
+#cote-widget-input {
+    box-sizing: border-box;
+    background-image: url('searchicon.png');
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    padding: 14px 20px 12px 45px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+/* The search field when it gets focus/clicked on */
+#cote-widget-input:focus {outline: 3px solid #ddd;}
+
+/* The container <div> - needed to position the dropdown content */
+.cote-widget-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.cote-widget-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 230px;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.cote-widget-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.cote-widget-dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.cote-widget-show {display:block;}
