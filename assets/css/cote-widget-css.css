@@ -8,6 +8,10 @@
     box-shadow: none !important;
     width: auto !important;
 }
+.cote-widget {
+    border: 1px solid black;
+    margin: 5px;
+}
 .cote-widget:not(.cote-footer-link) {
     display: flex;
     flex-direction: column;

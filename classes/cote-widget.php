@@ -58,32 +58,6 @@ if (!class_exists("COTE_Widget")) {
 
 				$widget .= '"'.include(COTE_PLUGIN_PATH."/views/cote-widget.php").'"';
 
-				// before and after widget arguments are defined by themes
-//				$widgetStyle = COTE_Utils::getWidgetStyle($layout);
-//				$widget .= $widgetStyle;
-//				if (!empty($bonusClass)) {
-//					$widget .= '<div class="cote-widget '.$bonusClass.'">';
-//				} else {
-//					$widget .= '<div class="cote-widget">';
-//				}
-//				if (!empty($topImageUrl)&&!empty($topImageAltUrl)) {
-//					$image = '<img class="cote-widget-image" alt="'.$topImageAltUrl.'" src="'.$topImageUrl.'">';
-//					$widget .= $image;
-//				}
-//				if (!empty($layout['title'])) {
-//					if (!empty($args)&&empty($preview)) {
-//						$widget .= $args['before_title'] . $layout['title'] . $args['after_title'];
-//					} else {
-//						$widget .= '<div class="widget-title">'.$layout['title'].'</div>';
-//					}
-//				}
-//
-//				// This is where you run the code and display the output
-//                $widget .= '<button class="cote-widget-button1 cote-widget-button-shadowed">'.$layout['buttonText'].'</button>';
-//
-//				$widget .= '</div>';
-
-//				return $widget;
 				return "";
 			}
 			catch (Exception $ex) {}

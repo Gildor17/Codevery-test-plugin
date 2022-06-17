@@ -74,7 +74,11 @@ jQuery(document).ready(function() {
         if (infoBlock&&coteWidgetList&&coteWidgetList.length > 0) {
             let currentElementInfo = coteWidgetList[e.currentTarget.selectedIndex];
 
-            infoBlock.innerHTML = currentElementInfo['city'];
+            infoBlock.querySelector('.cote-widget-city').innerHTML = currentElementInfo['city'];
+            infoBlock.querySelector('.cote-widget-phone').innerHTML = currentElementInfo['phone'];
+            infoBlock.querySelector('.cote-widget-email').innerHTML = currentElementInfo['email'];
+            infoBlock.querySelector('.cote-widget-website').innerHTML = currentElementInfo['website'];
+            infoBlock.querySelector('.cote-widget-image').src = currentElementInfo['images'];
         }
     });
 

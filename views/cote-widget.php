@@ -3,7 +3,11 @@
     <select class="cote-widget-dropdown" name="state"></select>
 
     <div class="cote-widget-info-div">
-        <img class="cote-widget-image" alt="" src="<?php echo $topImageUrl; ?>">
+        <div class="cote-widget-city"></div>
+        <div class="cote-widget-phone"></div>
+        <div class="cote-widget-email"></div>
+        <div class="cote-widget-website"></div>
+        <img class="cote-widget-image" alt="" src="">
     </div>
 
 </div>

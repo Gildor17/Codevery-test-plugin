@@ -30,10 +30,7 @@ if (!class_exists("COTE_Utils")) {
 			try {
 				$layout = array(
 					'title' => 'Choose Index',
-					'buttonText' => 'Обращайтесь',
-					'buttonTextColor' => '#27AE60',
-					'buttonType' => 'shadowed',
-					'image' => 'https://ludoviccelle.com/wp-content/uploads/2014/06/GalerieHuman_0AD-LudoBoxArt02a180x272-02-1200.jpg',
+					'image' => '',
 				);
 
 				return $layout;
@@ -229,8 +226,7 @@ FROM '.$wpPrefix.self::REGIONS_DB_TABLE_NAME.' WCR
 LEFT JOIN '.$wpPrefix.self::AUTOSERVICE_TO_REGION_DB_TABLE_NAME.' WCATR ON WCATR.region_code = WCR.region_code
 LEFT JOIN '.$wpPrefix.self::AUTOSERVICES_DB_TABLE_NAME.' WCA ON WCA.franchise_id = WCATR.franchise_id
 WHERE WCATR.franchise_id IS NOT NULL
-ORDER BY WCR.postal_code, WCA.franchise_name
-LIMIT 10'
+ORDER BY WCR.postal_code, WCA.franchise_name'
                     );
 
 					$getResult = $wpdb->get_results($queryString, ARRAY_A);
@@ -292,7 +288,7 @@ LIMIT 10'
 				$autoServiceToRegionQuery .= "INSERT IGNORE INTO ".$wpPrefix.self::AUTOSERVICE_TO_REGION_DB_TABLE_NAME." (franchise_id, region_code) VALUES ";
 				foreach ($decodedRequestResult['auto_service'] as $item) {
 					$counter ++;
-					$autoServiceQuery .= ($counter != 1 ?", ":"")."(".(int) sanitize_text_field($item['franchise_id']).",'".sanitize_text_field($item['franchise_name'])."','".sanitize_text_field($item['phone'])."','".sanitize_text_field($item['website'])."','".sanitize_text_field($item['email'])."','".sanitize_text_field($item['images'])."')";
+					$autoServiceQuery .= ($counter != 1 ?", ":"")."(".(int) sanitize_text_field($item['franchise_id']).",'".sanitize_text_field($item['franchise_name'])."','".sanitize_text_field($item['phone'])."','".sanitize_text_field($item['website'])."','".sanitize_text_field($item['email'])."','".$requestUrl.sanitize_text_field($item['images'])."')";
 
 					$regionalCodes = explode(",", $item['region_codes']);
 					if (!empty($regionalCodes)) {

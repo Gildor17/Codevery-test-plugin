@@ -18,6 +18,7 @@ http://pony.codevery.work:8450/task.html
 */
 
 //search still unfinished and css too
+//choose place for widget in theme widget placing
 
 require_once (ABSPATH."/wp-admin/includes/plugin.php");
 
