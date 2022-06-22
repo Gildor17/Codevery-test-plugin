@@ -17,7 +17,15 @@ if (!class_exists('COTE_Logs')) {
                     foreach ($logsList as $k => $item) {
                         self::$currentLogFileExists = false;
                         try {
-                            $filePath = COTE_PLUGIN_PATH.'/logs/'.$item;
+	                        $fileFolderPath = COTE_PLUGIN_PATH.'/logs';
+	                        if (!file_exists($fileFolderPath)) {
+		                        $folderCreateResult = mkdir($fileFolderPath, 0755, true);
+		                        if (empty($folderCreateResult)) {
+		                        	throw new Exception('log folder creation error');
+		                        }
+	                        }
+
+                            $filePath = $fileFolderPath.$item;
                             if (file_exists($filePath)) {
                                 self::$$k = $filePath;
                             } else {
