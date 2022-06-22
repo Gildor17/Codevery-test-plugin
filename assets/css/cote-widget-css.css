@@ -11,6 +11,7 @@
 .cote-widget {
     border: 1px solid black;
     margin: 5px;
+    text-align: center;
 }
 .cote-widget:not(.cote-footer-link) {
     display: flex;
@@ -24,6 +25,11 @@
     background-color: transparent;
     padding: 0;
     border: 0;
+}
+.cote-widget .cote-widget-info-div .cote-region-inline {
+    display: inline-flex;
+    margin: 5px;
+    text-justify: auto;
 }
 .cote-widget .widget-title, .cote-widget .widget-header, .cote-widget .sidebar-widget-title {
     color: black !important;

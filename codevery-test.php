@@ -22,14 +22,16 @@ http://pony.codevery.work:8450/task.html
 
 require_once (ABSPATH."/wp-admin/includes/plugin.php");
 
+include_once (dirname(__FILE__)."/classes/cote-logs.php");
 include_once (dirname(__FILE__)."/classes/cote-utils.php");
-include_once (dirname(__FILE__)."/classes/cote-franchise-search.php");
 include_once (dirname(__FILE__)."/config.php");
 include_once (dirname(__FILE__)."/classes/cote-widget.php");
 include_once (dirname(__FILE__)."/actions.php");
 
 try {
-	return true;
+	register_activation_hook(__FILE__, ['COTE_Utils','pluginActivated']);
+	register_uninstall_hook(__FILE__, ['COTE_Utils','pluginUninstalled']);
+//	return true;
 }
 catch (Exception $ex) {}
 catch (Error $ex) {}

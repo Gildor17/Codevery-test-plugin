@@ -13,20 +13,18 @@ function cote_ajaxGetDropdownElements() {
     }
 
     xhttp.onload = function(redata) {
-        console.log('test ajax stat loaded');
-        console.log('cote_c_res', redata['srcElement']['response']);
-        if (redata&&redata["srcElement"]&&(redata["srcElement"]["status"]==200)&&redata["srcElement"]["response"]) {
+        if (redata&&redata["srcElement"]&&(redata["srcElement"]["status"]===200)&&redata["srcElement"]["response"]) {
             coteWidgetList = JSON.parse(redata["srcElement"]["response"]);
             if (coteWidgetList&&coteWidgetList.length > 0) {
+                let widgetDropdown = jQuery('.cote-widget-dropdown');
                 for (let i = 0; i < coteWidgetList.length; i++) {
                     let newOption = new Option(coteWidgetList[i]['postal_code'], i, false, false);
-                    jQuery('.cote-widget-dropdown').append(newOption).trigger('change');
-
-                    // let tempElement = document.createElement('a');
-                    // tempElement.dataset.id = i;
-                    // tempElement.innerHTML= coteWidgetList[i]['postal_code'];
-                    // getWidgetDropdown.append(tempElement);
+                    // jQuery('.cote-widget-dropdown').append(newOption).trigger('change');
+                    widgetDropdown.append(newOption);
                 }
+
+                // jQuery('.cote-widget-dropdown').trigger('change.select2');
+                widgetDropdown.trigger({type: 'select2:select'});
             }
         }
     }
@@ -35,10 +33,6 @@ function cote_ajaxGetDropdownElements() {
     xhttp.send(sendData);
 
     return true;
-}
-
-function coteChangeWidgetSelect(state) {
-    console.log('selection state', state);
 }
 
 function coteDropdownFunction() {
@@ -70,14 +64,18 @@ jQuery(document).ready(function() {
         allowClear: true
         // templateSelection: coteChangeWidgetSelect
     }).on('select2:select', function (e) {
+        console.log('here1');
         let infoBlock = document.querySelector('.cote-widget-info-div');
         if (infoBlock&&coteWidgetList&&coteWidgetList.length > 0) {
             let currentElementInfo = coteWidgetList[e.currentTarget.selectedIndex];
 
-            infoBlock.querySelector('.cote-widget-city').innerHTML = currentElementInfo['city'];
+            infoBlock.querySelector('.cote-widget-franchise-name').innerHTML = currentElementInfo['franchise_name'];
             infoBlock.querySelector('.cote-widget-phone').innerHTML = currentElementInfo['phone'];
             infoBlock.querySelector('.cote-widget-email').innerHTML = currentElementInfo['email'];
             infoBlock.querySelector('.cote-widget-website').innerHTML = currentElementInfo['website'];
+            infoBlock.querySelector('.cote-widget-city').innerHTML = currentElementInfo['city'];
+            infoBlock.querySelector('.cote-widget-region').innerHTML = currentElementInfo['region'];
+            infoBlock.querySelector('.cote-widget-state').innerHTML = currentElementInfo['state'];
             infoBlock.querySelector('.cote-widget-image').src = currentElementInfo['images'];
         }
     });

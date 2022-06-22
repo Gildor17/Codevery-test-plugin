@@ -7,6 +7,8 @@ if (!class_exists("COTE_Utils")) {
 		const AUTOSERVICES_DB_TABLE_NAME = 'cote_autoservices';
 		const AUTOSERVICE_TO_REGION_DB_TABLE_NAME = 'cote_autoservice_to_region';
 		const REGIONS_DB_TABLE_NAME = 'cote_regions';
+		// usually I'm using const if its value used more than once
+	    const API_URL = "http://pony.codevery.work:8450";
 
 		public static function loadWidget() {
 			register_widget('COTE_Widget');
@@ -20,24 +22,25 @@ if (!class_exists("COTE_Utils")) {
 
 				return true;
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 
 			return false;
 		}
 
 		public static function getWidgetLayouts() {
-			try {
-				$layout = array(
-					'title' => 'Choose Index',
-					'image' => '',
-				);
+            $layout = array(
+                'title' => 'Choose Index',
+                'image' => '',
+            );
 
-				return $layout;
-			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
-			return false;
+            return $layout;
 		}
 
 		public static function getWidgetStyle($layout, $bonusClass = '') {
@@ -119,19 +122,19 @@ if (!class_exists("COTE_Utils")) {
 
 				return $result;
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 			return '';
 		}
 
 		public static function createDbTables($wpdb, $wpPrefix) {
 			try {
-				global $wpdb;
-				if (empty($wpdb)) {
-					return false;
-				}
-
-				$wpPrefix = self::getWpPrefix();
 				$tableCreateCodes = [
 					"cote_autoservices" =>
 "CREATE TABLE `".esc_sql($wpPrefix.self::AUTOSERVICES_DB_TABLE_NAME)."` (
@@ -158,7 +161,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB;",
 					"cote_regions" =>
 "CREATE TABLE `".esc_sql($wpPrefix.self::REGIONS_DB_TABLE_NAME)."` (
-	`id` INT(10) NOT NULL,
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
 	`postal_code` INT(10) NOT NULL,
 	`region_code` INT(10) NOT NULL,
 	`city` TEXT NOT NULL COLLATE 'utf8mb4_general_ci',
@@ -184,28 +187,69 @@ ENGINE=InnoDB;",
 				unset($tName,$tCode);
 
 				if (!empty($creationError)) {
-				    return false;
+				    throw new Exception('1 or more tables are not created');
                 }
 
 				return true;
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 
 			return false;
 		}
 
+		public static function removeDbTables() {
+			try {
+				global $wpdb;
+				if (empty($wpdb)) {
+					throw new Exception("wpdb doesn't exists");
+				}
+
+				$wpPrefix = self::getWpPrefix();
+
+				$tableRemoveCodes = [
+					"cote_autoservices" =>
+						"DROP TABLE IF EXISTS `".esc_sql($wpPrefix.self::AUTOSERVICES_DB_TABLE_NAME)."`;",
+					"cote_autoservice_to_region" =>
+						"DROP TABLE IF EXISTS `".esc_sql($wpPrefix.self::AUTOSERVICE_TO_REGION_DB_TABLE_NAME)."`;",
+					"cote_regions" =>
+						"DROP TABLE IF EXISTS `".esc_sql($wpPrefix.self::REGIONS_DB_TABLE_NAME)."`;",
+				];
+
+				foreach ($tableRemoveCodes as $tName => $tCode) {
+                    require_once (ABSPATH."/wp-admin/includes/upgrade.php");
+                    $wpdb->query($tCode);
+				}
+				unset($tName,$tCode);
+
+				return true;
+			}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+
+			return false;
+        }
+
 		public static function getWpPrefix() {
 			$wpPrefix = '';
-			try {
-				if (!empty($GLOBALS['wpPrefix'])) {
-					$wpPrefix = $GLOBALS['wpPrefix'];
-				} elseif (!empty($GLOBALS['table_prefix'])) {
-					$wpPrefix = $GLOBALS['table_prefix'];
-				}
-			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+
+            if (!empty($GLOBALS['wpPrefix'])) {
+                $wpPrefix = $GLOBALS['wpPrefix'];
+            } elseif (!empty($GLOBALS['table_prefix'])) {
+                $wpPrefix = $GLOBALS['table_prefix'];
+            }
 
 			return $wpPrefix;
 		}
@@ -235,8 +279,14 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 //					$tunnelData = $getResult;
 				}
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 
 			wp_die($tunnelData);
 //			return false;
@@ -251,7 +301,7 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 
 				global $wpdb;
 				if (empty($wpdb)) {
-					return false;
+					throw new Exception("wpdb doesn't exists");
 				}
 
 				$wpPrefix = self::getWpPrefix();
@@ -261,7 +311,6 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 					return false;
 				}
 
-				$requestUrl = "http://pony.codevery.work:8450";
 				$requestArgs = [
 					'headers' => [
 						'Api-Key' => 548979832057758973
@@ -270,14 +319,14 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 					'timeout' => 15
 				];
 
-				$requestResult = wp_remote_get($requestUrl, $requestArgs);
+				$requestResult = wp_remote_get(self::API_URL, $requestArgs);
 				if (empty($requestResult)||empty($requestResult['body'])) {
-					return false;
+					throw new Exception("api request body is empty");
 				}
 
 				$decodedRequestResult = json_decode($requestResult['body'], true);
 				if (empty($decodedRequestResult)||($decodedRequestResult["success"] == false)) {
-					return false;
+					throw new Exception("api request status not success");
 				}
 
 				$autoServiceQuery = '';
@@ -288,14 +337,13 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 				$autoServiceToRegionQuery .= "INSERT IGNORE INTO ".$wpPrefix.self::AUTOSERVICE_TO_REGION_DB_TABLE_NAME." (franchise_id, region_code) VALUES ";
 				foreach ($decodedRequestResult['auto_service'] as $item) {
 					$counter ++;
-					$autoServiceQuery .= ($counter != 1 ?", ":"")."(".(int) sanitize_text_field($item['franchise_id']).",'".sanitize_text_field($item['franchise_name'])."','".sanitize_text_field($item['phone'])."','".sanitize_text_field($item['website'])."','".sanitize_text_field($item['email'])."','".$requestUrl.sanitize_text_field($item['images'])."')";
+					$autoServiceQuery .= ($counter != 1 ?", ":"")."(".(int) sanitize_text_field($item['franchise_id']).",'".sanitize_text_field($item['franchise_name'])."','".sanitize_text_field($item['phone'])."','".sanitize_text_field($item['website'])."','".sanitize_text_field($item['email'])."','".self::API_URL.sanitize_text_field($item['images'])."')";
 
 					$regionalCodes = explode(",", $item['region_codes']);
 					if (!empty($regionalCodes)) {
 						foreach ($regionalCodes as $regionCode) {
 							$counter2 ++;
 							$autoServiceToRegionQuery .= ($counter2 != 1 ?", ":"")."(".(int) sanitize_text_field($item['franchise_id']).",".(int) sanitize_text_field($regionCode).")";
-
 						}
 						unset($regionCode);
 					}
@@ -315,7 +363,7 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 				}
 				unset($item, $counter);
 				$regionQuery .= " ON DUPLICATE KEY UPDATE postal_code = values(postal_code), region_code = values(region_code), city = values(city), state = values(state), region = values(region) ";
-				$rrt = $wpdb->query($regionQuery);
+				$wpdb->query($regionQuery);
 
 				set_transient('coteSyncCd', 1, 60*10);
 				wp_cache_flush();
@@ -362,8 +410,14 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 
 				return true;
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 
 			return false;
 		}
@@ -384,10 +438,30 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 					"1.0"
 				);
 
+//				wp_enqueue_script(
+//					'cote-js-functions',
+//					'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+//					array('jquery'),
+//					"1.0"
+//				);
+//
+//				wp_enqueue_style(
+//					'cote-widget-css',
+//					'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+//					array(),
+//					"1.0"
+//				);
+
 				return true;
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 
 			return false;
 		}
@@ -402,17 +476,89 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 
 				return true;
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 
 			return false;
 		}
 
 		public static function scriptsToHeaderAdd() {
+		    //unused
 			?><link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /><?php
             ?><script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script><?php
 
             return true;
 		}
+
+		public static function fileGenerator($pathToFile) {
+			try {
+				$fileExists = file_exists($pathToFile);
+				if (empty($fileExists)) {
+					$createdFile = fopen($pathToFile, 'w');
+					fclose($createdFile);
+
+					$fileExists = file_exists($pathToFile);
+					if (empty($fileExists)) {
+						$errorText = basename($pathToFile)." file generation error";
+						COTE_Logs::saveLogs('errors', $errorText);
+					}
+				}
+				return $fileExists;
+			}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+
+			return false;
+		}
+
+		public static function pluginActivated() {
+			try {
+				COTE_Logs::generateFilePaths();
+				self::syncToApi();
+			}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+
+			return false;
+		}
+
+		public static function pluginUninstalled() {
+			// here
+			try {
+				self::removeDbTables();
+
+				return true;
+			}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+
+			return false;
+		}
+
+
 	}
 }

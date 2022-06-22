@@ -23,46 +23,48 @@ if (!class_exists("COTE_Widget")) {
 
 //				if (!empty($args)&&!empty($args['id'])&&strpos($args['id'], 'sidebar')!==false) {
 				if (!empty($args)&&!empty($args['id'])) {
-					$widget = self::constructWidget($this->layout, $args);
-					if (!empty($widget)) {
-						echo $args['before_widget'];
-						echo $widget;
-						echo $args['after_widget'];
-                    }
+					echo $args['before_widget'];
+					self::constructWidget($this->layout, $args);
+//					echo $widget;
+					echo $args['after_widget'];
 				}
 
 				return true;
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
 			return false;
 		}
 
 		public static function constructWidget($layout, $args = null, $preview = false, $wCounter = null) {
 			try {
-				$widget = '';
-//				return $widget;
-				if (!empty($preview)&&!empty($wCounter)) {
-					$bonusClass = 'widget-preview-'.$wCounter;
-				}
+//				$widget = '';
 
-				if (!empty($layout['image'])) {
-					$topImageUrl = $layout['image'];
-				}
-
-				if (!empty($args)&&empty($preview)) {
-					$layout['title'] .= $args['before_title'] . $layout['title'] . $args['after_title'];
+				if (!empty($args)&&!empty($args['before_title'])&&!empty($args['after_title'])) {
+					$layout['title'] = $args['before_title'] . $layout['title'] . $args['after_title'];
 				} else {
-					$layout['title'] .= '<div class="widget-title">'.$layout['title'].'</div>';
+					$layout['title'] = '<div class="widget-title">'.$layout['title'].'</div>';
 				}
 
-				$widget .= '"'.include(COTE_PLUGIN_PATH."/views/cote-widget.php").'"';
+				include(COTE_PLUGIN_PATH."/views/cote-widget.php");
 
 				return "";
 			}
-			catch (Exception $ex) {}
-			catch (Error $ex) {}
-			return '';
+			catch (Exception $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			catch (Error $ex) {
+				$errorText = __FUNCTION__." error: ".$ex->getMessage();
+				COTE_Logs::saveLogs('errors', $errorText);
+			}
+			return "";
 		}
 
 		// Creating widget Backend
