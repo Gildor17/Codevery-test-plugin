@@ -333,9 +333,13 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 				];
 
 				$requestResult = wp_remote_get(self::API_URL, $requestArgs);
-				if (empty($requestResult)||empty($requestResult['body'])) {
+				if (empty($requestResult)) {
+					throw new Exception("api request is empty");
+				} elseif (is_wp_error($requestResult)) {
+					throw new Exception($requestResult->get_error_message());
+				} elseif (!empty($requestResult)&&empty($requestResult['body'])) {
 					throw new Exception("api request body is empty");
-				}
+                }
 
 				$decodedRequestResult = json_decode($requestResult['body'], true);
 				if (empty($decodedRequestResult)||($decodedRequestResult["success"] == false)) {
@@ -380,46 +384,6 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 
 				set_transient('coteSyncCd', 1, 60*10);
 				wp_cache_flush();
-//				foreach ($decodedRequestResult['auto_service'] as $item) {
-//			        $dataForUpdate = [
-//				        "franchise_id" => $item["franchise_id"],
-//			            "franchise_name"=> $item["franchise_name"],
-//			            "phone"=> $item["phone"],
-//			            "website"=> $item["website"],
-//			            "email"=> $item["email"],
-//			            "images"=> $item["images"]
-//			        ];
-//
-//					$updateResult = $wpdb->update( $wpPrefix.'cote_autoservices', $dataForUpdate,
-//						['franchise_id' => $item["franchise_id"]]);
-//
-//					if (!empty($updateResult)&&is_int($updateResult)) {
-//						$regionalCodes = explode(",", $item['region_codes']);
-//						if (!empty($regionalCodes)) {
-//							foreach ($decodedRequestResult['auto_service'] as $regionCode) {
-//								$updateResult = $wpdb->update( $wpPrefix.'cote_autoservices', $dataForUpdate,
-//									['franchise_id' => $item["franchise_id"]]);
-//							}
-//							unset($regionCode);
-//						}
-//					}
-//				}
-//				unset($item);
-//
-//				foreach ($decodedRequestResult['region_mappings_string'] as $item) {
-//					$dataForUpdate = [
-//						"postal_code" => $item["postal_code"],
-//						"region_code"=> $item["region_code"],
-//						"city"=> $item["city"],
-//						"state"=> $item["state"],
-//						"region"=> $item["region"],
-//					];
-//
-//					$updateResult = $wpdb->update( $wpPrefix.'cote_autoservices', $dataForUpdate,
-//						['region_code' => $item["region_code"]]);
-//
-//				}
-//				unset($item);
 
 				return true;
 			}
