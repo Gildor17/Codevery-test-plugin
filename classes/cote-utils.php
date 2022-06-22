@@ -275,6 +275,19 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 
 					$getResult = $wpdb->get_results($queryString, ARRAY_A);
 
+					if (!empty($getResult)) {
+					    $regroupedResult = [];
+					    foreach ($getResult as $k => $item) {
+					        if (!isset($regroupedResult[$item['postal_code']])) {
+						        $regroupedResult[$item['postal_code']] = [];
+                            }
+						    $regroupedResult[$item['postal_code']][$item['franchise_id']] = $item;
+                        }
+					    unset($k, $item);
+						$getResult = $regroupedResult;
+						$getResult = (object) $getResult;
+                    }
+
 					$tunnelData = json_encode($getResult);
 //					$tunnelData = $getResult;
 				}

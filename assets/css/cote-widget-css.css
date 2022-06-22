@@ -28,8 +28,18 @@
 }
 .cote-widget .cote-widget-info-div .cote-region-inline {
     display: inline-flex;
-    margin: 5px;
+    margin: 5px auto;
+    text-align: justify;
     text-justify: auto;
+}
+.cote-widget .cote-widget-info-div .cote-region-inline div {
+    display: block;
+    position: relative;
+    margin: auto;
+}
+.cote-widget .cote-widget-info-div .cote-widget-franchise-name {
+    font-weight: bold;
+    margin: 5px auto;
 }
 .cote-widget .widget-title, .cote-widget .widget-header, .cote-widget .sidebar-widget-title {
     color: black !important;
@@ -113,6 +123,11 @@
 
 /* The container <div> - needed to position the dropdown content */
 .cote-widget-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.cote-widget-dropdown-2 {
     position: relative;
     display: inline-block;
 }

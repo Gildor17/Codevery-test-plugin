@@ -1,6 +1,7 @@
 <div class="cote-widget">
     <?php echo $layout['title']?>
     <select class="cote-widget-dropdown" name="state"></select>
+    <select class="cote-widget-dropdown-2" name="state"></select>
 
     <div class="cote-widget-info-div">
         <div class="cote-widget-franchise-name"></div>
