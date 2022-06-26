@@ -14,6 +14,7 @@ try {
 	add_action('wp_ajax_ajaxGetWidgetData', ['COTE_Utils', 'ajaxGetWidgetData']);
 	add_action('wp_ajax_nopriv_ajaxGetWidgetData', ['COTE_Utils', 'ajaxGetWidgetData']);
 	add_action('wp_head', ['COTE_Utils', 'scriptsToHeaderAdd']);
+	COTE_Logs::generateFilePaths();
 
 	if (!empty(apply_filters('wp_doing_cron', defined('DOING_CRON')&&DOING_CRON))) {
 		COTE_Utils::syncToApi();

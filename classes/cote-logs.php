@@ -17,7 +17,7 @@ if (!class_exists('COTE_Logs')) {
                     foreach ($logsList as $k => $item) {
                         self::$currentLogFileExists = false;
                         try {
-	                        $fileFolderPath = COTE_PLUGIN_PATH.'/logs';
+	                        $fileFolderPath = COTE_PLUGIN_PATH.'/logs/';
 	                        if (!file_exists($fileFolderPath)) {
 		                        $folderCreateResult = mkdir($fileFolderPath, 0755, true);
 		                        if (empty($folderCreateResult)) {
@@ -69,7 +69,11 @@ if (!class_exists('COTE_Logs')) {
 
                     error_log($message, 3, self::$$logAttributeName);
                 }
-            } catch (Exception $ex) {} catch (Error $er) {}
+            } catch (Exception $ex) {
+            	error_log('cote save logs error');
+            } catch (Error $er) {
+	            error_log('cote save logs error');
+            }
         }
     }
 }

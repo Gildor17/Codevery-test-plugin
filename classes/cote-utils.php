@@ -271,7 +271,7 @@ LEFT JOIN '.$wpPrefix.self::AUTOSERVICE_TO_REGION_DB_TABLE_NAME.' WCATR ON WCATR
 LEFT JOIN '.$wpPrefix.self::AUTOSERVICES_DB_TABLE_NAME.' WCA ON WCA.franchise_id = WCATR.franchise_id
 WHERE WCATR.franchise_id IS NOT NULL
 ORDER BY WCR.postal_code, WCA.franchise_name'
-                    );
+                    , []);
 
 					$getResult = $wpdb->get_results($queryString, ARRAY_A);
 
@@ -307,6 +307,7 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 
 		public static function syncToApi() {
 			try {
+				delete_transient('coteSyncCd');
 				$syncCd = get_transient('coteSyncCd');
 				if (!empty($syncCd)) {
 				    return true;
@@ -329,7 +330,7 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 						'Api-Key' => 548979832057758973
 					],
 					'sslverify' => false,
-					'timeout' => 15
+					'timeout' => 25
 				];
 
 				$requestResult = wp_remote_get(self::API_URL, $requestArgs);
@@ -340,6 +341,13 @@ ORDER BY WCR.postal_code, WCA.franchise_name'
 				} elseif (!empty($requestResult)&&empty($requestResult['body'])) {
 					throw new Exception("api request body is empty");
                 }
+				if (!empty($requestResult['response'])) {
+				    $messageText = "response: code: ".$requestResult['response']['code']."; message: ".$requestResult['response']['message'].";";
+					COTE_Logs::saveLogs('errors', $messageText);
+                } else {
+					throw new Exception("api request response is empty");
+                }
+
 
 				$decodedRequestResult = json_decode($requestResult['body'], true);
 				if (empty($decodedRequestResult)||($decodedRequestResult["success"] == false)) {
